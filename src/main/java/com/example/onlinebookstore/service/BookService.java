@@ -9,11 +9,11 @@ public interface BookService {
 
     List<BookDto> findAll();
 
-    BookDto findBById(Long id);
+    BookDto findById(Long id);
 
     BookDto save(CreateBookRequestDto bookDto);
 
-    void deletedById(Long id);
+    void deleteById(Long id);
 
     List<BookDto> search(BookSearchParameters params);
 }
