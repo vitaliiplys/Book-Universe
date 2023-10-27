@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto findBById(Long id) {
+    public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can`t find book by id" + id)
         );
@@ -43,7 +43,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deletedById(Long id) {
+    public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
 
