@@ -1,6 +1,6 @@
 package com.example.onlinebookstore.repository.book;
 
-import com.example.onlinebookstore.exeption.SpecificationNotFoundException;
+import com.example.onlinebookstore.exception.SpecificationNotFoundException;
 import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.repository.SpecificationProvider;
 import com.example.onlinebookstore.repository.SpecificationProviderManager;
