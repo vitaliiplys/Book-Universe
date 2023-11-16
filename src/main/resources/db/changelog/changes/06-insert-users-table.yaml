@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users-to-users-table
+      author: plys
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: "email", value: "admin@example.com" }
+              - column: { name: "password", value: "123456789" }
+              - column: {name: "first_name", value: "Admin"}
+              - column: {name: "last_name", value: "Admin"}
+              - column: {name: "shipping_address", value: "Kiev, Ukraine"}
+        - insert:
+            tableName: users
+            columns:
+              - column: { name: "email", value: "bob@example.com" }
+              - column: { name: "password", value: "123456789123" }
+              - column: { name: "first_name", value: "Bob" }
+              - column: { name: "last_name", value: "Bobson" }
+              - column: { name: "shipping_address", value: "London, UK" }
