@@ -4,7 +4,7 @@ databaseChangeLog:
       author: plys
       changes:
         - createTable:
-            tableName: users_roles
+            tableName: user_role
             columns:
               - column:
                   name: user_id

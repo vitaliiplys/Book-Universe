@@ -2,13 +2,12 @@ package com.example.onlinebookstore.service.user.impl;
 
 import com.example.onlinebookstore.dto.user.UserRegistrationRequestDto;
 import com.example.onlinebookstore.dto.user.UserResponseDto;
-import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.exception.RegistrationException;
 import com.example.onlinebookstore.mapper.UserMapper;
 import com.example.onlinebookstore.model.Role;
 import com.example.onlinebookstore.model.User;
-import com.example.onlinebookstore.repository.role.RoleRepository;
 import com.example.onlinebookstore.repository.user.UserRepository;
+import com.example.onlinebookstore.service.role.RoleService;
 import com.example.onlinebookstore.service.user.UserService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
     @Override
     public UserResponseDto register(UserRegistrationRequestDto request)
@@ -35,9 +34,7 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setShippingAddress(request.getShippingAddress());
-        Role role = roleRepository.findByName(Role.RoleName.ROLE_USER).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find role" + Role.RoleName.ROLE_USER)
-        );
+        Role role = roleService.findByName(Role.RoleName.ROLE_USER);
         user.setRoles(Set.of(role));
         User savedUser = userRepository.save(user);
         return userMapper.toUserResponse(savedUser);
