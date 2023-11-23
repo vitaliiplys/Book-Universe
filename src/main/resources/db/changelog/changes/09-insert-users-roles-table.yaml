@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09-insert-user-role-table
+      author: plys
+      changes:
+        - insert:
+            tableName: user_role
+            columns:
+              - column: {name: "user_id", valueNumeric: 1}
+              - column: {name: "role_id", valueNumeric: 1}
+        - insert:
+            tableName: user_role
+            columns:
+              - column: { name: "user_id", valueNumeric: 2 }
+              - column: { name: "role_id", valueNumeric: 2 }
