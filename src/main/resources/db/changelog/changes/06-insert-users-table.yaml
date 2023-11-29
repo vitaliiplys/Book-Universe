@@ -7,7 +7,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: "email", value: "admin@example.com" }
-              - column: { name: "password", value: "123456789" }
+              - column: { name: "password", value: "$2a$10$3iTqtNqyu7B4/HNV0/Kp2.iaVtCyUbtvEYlW8iYVypBEpVKfUZxsC" }
               - column: {name: "first_name", value: "Admin"}
               - column: {name: "last_name", value: "Admin"}
               - column: {name: "shipping_address", value: "Kiev, Ukraine"}
@@ -15,7 +15,7 @@ databaseChangeLog:
             tableName: users
             columns:
               - column: { name: "email", value: "bob@example.com" }
-              - column: { name: "password", value: "123456789123" }
+              - column: { name: "password", value: "$2a$10$JZ5wAHjFoGDhqQdG18XDeelfXHBz3zpDKDB2x6CkJLILW0yRCqSmK" }
               - column: { name: "first_name", value: "Bob" }
               - column: { name: "last_name", value: "Bobson" }
               - column: { name: "shipping_address", value: "London, UK" }
