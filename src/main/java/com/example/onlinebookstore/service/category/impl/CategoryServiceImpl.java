@@ -1,10 +1,11 @@
-package com.example.onlinebookstore.service.category;
+package com.example.onlinebookstore.service.category.impl;
 
 import com.example.onlinebookstore.dto.category.CategoryDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.CategoryMapper;
 import com.example.onlinebookstore.model.Category;
 import com.example.onlinebookstore.repository.category.CategoryRepository;
+import com.example.onlinebookstore.service.category.CategoryService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
