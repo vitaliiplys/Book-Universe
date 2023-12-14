@@ -5,9 +5,12 @@ import com.example.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.CartItemMapper;
 import com.example.onlinebookstore.mapper.ShoppingCartMapper;
+import com.example.onlinebookstore.model.Book;
 import com.example.onlinebookstore.model.CartItem;
 import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
+import com.example.onlinebookstore.repository.book.BookRepository;
+import com.example.onlinebookstore.repository.cartitem.CartItemRepository;
 import com.example.onlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookstore.service.shoppingcart.ShoppingCartService;
 import java.util.HashSet;
@@ -21,6 +24,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final ShoppingCartMapper shoppingCartMapper;
     private final CartItemMapper cartItemMapper;
+    private final CartItemRepository cartItemRepository;
+    private final BookRepository bookRepository;
 
     @Override
     public ShoppingCartDto addBookShopCart(User user, CartItemDto cartItemDto) {
@@ -29,17 +34,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         if (cartItems == null) {
             cartItems = new HashSet<>();
         }
+
+        CartItem itemToSave = null;
+
         boolean bookexist = false;
         for (CartItem cartItem : cartItems) {
             if (cartItemDto != null && cartItem.getBook().getId().equals(cartItemDto.getBookId())) {
                 cartItem.setQuantity(cartItem.getQuantity() + cartItemDto.getQuantity());
+                itemToSave = cartItem;
                 bookexist = true;
             }
         }
+        Book book = bookRepository.findById(cartItemDto.getBookId()).orElseThrow(
+                () -> new EntityNotFoundException("Can`t find book id")
+        );
         if (!bookexist) {
-            cartItems.add(cartItemMapper.toModel(cartItemDto));
+            itemToSave = cartItemMapper.toModel(cartItemDto, book);
+            itemToSave.setShoppingCart(shoppingCart);
+            cartItems.add(itemToSave);
         }
-        shoppingCartRepository.save(shoppingCart);
+        cartItemRepository.save(itemToSave);
         return shoppingCartMapper.toDto(shoppingCart);
     }
 
