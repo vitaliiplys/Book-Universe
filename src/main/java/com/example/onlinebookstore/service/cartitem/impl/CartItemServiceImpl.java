@@ -5,10 +5,8 @@ import com.example.onlinebookstore.exception.DataProcessingException;
 import com.example.onlinebookstore.exception.EntityNotFoundException;
 import com.example.onlinebookstore.mapper.ShoppingCartMapper;
 import com.example.onlinebookstore.model.CartItem;
-import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 import com.example.onlinebookstore.repository.cartitem.CartItemRepository;
-import com.example.onlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.example.onlinebookstore.service.cartitem.CartItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ShoppingCartMapper shoppingCartMapper;
-    private final ShoppingCartRepository shoppingCartRepository;
 
     @Override
     public ShoppingCartDto updateBookQuantityById(Long id, int quantity) {
@@ -34,10 +31,7 @@ public class CartItemServiceImpl implements CartItemService {
         CartItem cartItem = cartItemRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can`t find item by id")
         );
-        ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(user.getId()).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find shopping cart by user id")
-        );
-        if (shoppingCart.equals(cartItem.getShoppingCart())) {
+        if (cartItem.getShoppingCart().getUser().getId().equals(user.getId())) {
             cartItemRepository.delete(cartItem);
             return;
         }
