@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-orders-order-items-table
+      author: plys
+      changes:
+        - createTable:
+            tableName: orders_order_items
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_orders_order_items_order
+                    referencedTableName: orders
+                    referencedColumnNames: id
+                    nullable: false
+                    deleteCascade: false
+              - column:
+                  name: order_items_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_orders_order_items_item
+                    referencedTableName: order_items
+                    referencedColumnNames: id
+                    nullable: false
+                    deleteCascade: false
