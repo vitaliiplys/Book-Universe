@@ -24,7 +24,7 @@ import org.hibernate.annotations.Where;
 @Getter
 @Setter
 @Table(name = "orders")
-@SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id = ? ")
+@SQLDelete(sql = "UPDATE orders SET is_deleted = true WHERE id = ?")
 @Where(clause = "is_deleted = false")
 public class Order {
     @Id
@@ -50,12 +50,12 @@ public class Order {
     @OneToMany
     private Set<OrderItem> orderItems = new HashSet<>();
 
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
+
     public enum Status {
         PENDING,
         DELIVERED,
         COMPLETED
     }
-
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted;
 }
