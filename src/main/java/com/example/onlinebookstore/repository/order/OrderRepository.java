@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @EntityGraph(attributePaths = {"user"})
+    @EntityGraph(attributePaths = "user")
     List<Order> findByUser(User user, Pageable pageable);
 
     @EntityGraph(attributePaths = "orderItems")

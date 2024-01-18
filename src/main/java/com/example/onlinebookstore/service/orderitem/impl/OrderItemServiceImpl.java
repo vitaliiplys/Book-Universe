@@ -22,7 +22,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     public List<OrderItemResponseDto> findByIdAndUser(Long orderId, User user) {
         Order order = orderRepository.findByIdAndUser(orderId, user).orElseThrow(
-                () -> new EntityNotFoundException("Order not found for id")
+                () -> new EntityNotFoundException("Order not found for id " + orderId)
         );
         Set<OrderItem> orderItems = order.getOrderItems();
         return orderItems.stream()
@@ -36,13 +36,15 @@ public class OrderItemServiceImpl implements OrderItemService {
         Order orderSaved = orderRepository.findByUserAndIdAndOrderItems_Id(
                 user, orderId, itemId).orElseThrow(
                         () -> new EntityNotFoundException(
-                        "Can`t find order and order items the user id ")
+                        "Can`t find order and order items the user id " + itemId)
                 );
         Set<OrderItem> orderItems = orderSaved.getOrderItems();
         OrderItem orderItemSaved = orderItems.stream()
                 .filter(orderItem -> orderItem.getId().equals(itemId))
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException("Can`t find order item for id "));
+                .orElseThrow(
+                        () -> new EntityNotFoundException(
+                                "Can`t find order item for id " + itemId));
         return orderItemMapper.toDto(orderItemSaved);
     }
 }

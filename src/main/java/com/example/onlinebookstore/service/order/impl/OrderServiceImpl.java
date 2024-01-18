@@ -51,16 +51,7 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingAddress(requestDto.getShippingAddress());
         order.setOrderDate(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
-
-        for (CartItem cartItem : shoppingCartByUser.getCartItems()) {
-            OrderItem orderItem = new OrderItem();
-            orderItem.setBook(cartItem.getBook());
-            orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setOrder(savedOrder);
-            orderItem.setPrice(cartItem.getBook().getPrice());
-            OrderItem savedOrderItem = orderItemRepository.save(orderItem);
-            order.getOrderItems().add(savedOrderItem);
-        }
+        processOrderItems(shoppingCartByUser, savedOrder);
         shoppingCartService.clearShoppingCart(shoppingCartByUser);
         return orderMapper.toDto(savedOrder);
     }
@@ -81,5 +72,17 @@ public class OrderServiceImpl implements OrderService {
         );
         orderSaved.setStatus(orderUpdateStatusDto.getStatus());
         return orderMapper.toDto(orderRepository.save(orderSaved));
+    }
+
+    private void processOrderItems(ShoppingCart shoppingCart, Order order) {
+        for (CartItem cartItem : shoppingCart.getCartItems()) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setBook(cartItem.getBook());
+            orderItem.setQuantity(cartItem.getQuantity());
+            orderItem.setOrder(order);
+            orderItem.setPrice(cartItem.getBook().getPrice());
+            OrderItem savedOrderItem = orderItemRepository.save(orderItem);
+            order.getOrderItems().add(savedOrderItem);
+        }
     }
 }

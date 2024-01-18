@@ -13,10 +13,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Getter
 @Setter
 @Entity
+@SQLDelete(sql = "UPDATE cart_items SET is_deleted = TRUE WHERE id = ?")
+@Where(clause = "is_deleted = FALSE")
 @Table(name = "cart_items")
 public class CartItem {
     @Id
@@ -35,4 +39,7 @@ public class CartItem {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted;
 }
