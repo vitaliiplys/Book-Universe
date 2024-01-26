@@ -32,7 +32,8 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     @Override
     public OrderItemResponseDto findByUserAndIdAndOrderItems_Id(User user,
-                                                                Long orderId, Long itemId) {
+                                                                Long orderId,
+                                                                Long itemId) {
         Order orderSaved = orderRepository.findByUserAndIdAndOrderItems_Id(
                 user, orderId, itemId).orElseThrow(
                         () -> new EntityNotFoundException(
