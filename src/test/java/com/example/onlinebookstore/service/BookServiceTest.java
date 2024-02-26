@@ -82,6 +82,7 @@ public class BookServiceTest {
     void getBookById_InvalidBookId_ShouldReturnException() {
         // Given
         Long invalidId = 100L;
+
         when(bookRepository.findById(invalidId)).thenReturn(Optional.empty());
 
         // When
@@ -160,10 +161,14 @@ public class BookServiceTest {
     void saveBook_ValidBook_ReturnBookRequestDtoOk() {
         // Given
         CreateBookRequestDto requestDto = createBookRequestDto();
+
         Book book = createBook();
+
         Book savedBook = createBook();
         savedBook.setId(1L);
+
         BookDto bookDto = createBookDto();
+
         when(bookMapper.toModel(requestDto)).thenReturn(book);
         when(bookRepository.save(book)).thenReturn(savedBook);
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category()));
@@ -317,13 +322,16 @@ public class BookServiceTest {
                 new String[]{"Book1"}, new String[]{"Author1"});
         Specification<Book> specification = bookSpecificationBuilder.build(params);
         List<Book> bookList = createBookList();
+
         Book book = createBook();
         book.setId(1L);
+
         List<BookDto> bookDtoList = createBookDtoList();
         when(bookSpecificationBuilder.build(params)).thenReturn(specification);
         when(bookRepository.findAll(specification)).thenReturn(bookList);
         when(bookMapper.toDto(bookList.get(0))).thenReturn(bookDtoList.get(0));
         when(bookMapper.toDto(bookList.get(1))).thenReturn(bookDtoList.get(1));
+
         // When
         List<BookDto> result = bookService.search(params);
 

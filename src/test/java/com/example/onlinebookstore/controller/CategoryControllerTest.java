@@ -117,7 +117,6 @@ public class CategoryControllerTest {
                 .andReturn();
 
         // Then
-
         CategoryDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), CategoryDto.class);
         assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
@@ -174,7 +173,6 @@ public class CategoryControllerTest {
         CategoryDto expected = createCategoryDto();
 
         // When
-
         MvcResult result = mockMvc.perform(
                 get("/categories/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -199,6 +197,7 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
+
         // Then
         Assertions.assertTrue(result.getResponse().getContentAsString()
                 .contains("Can't find category with id " + id));
@@ -214,7 +213,6 @@ public class CategoryControllerTest {
     void updateCategory_ByValidId_ShouldReturnUpdateCategory() throws Exception {
         // Given
         Long id = 2L;
-
         CategoryDto updateCategoryDto = new CategoryDto(
                 2L, "UpdateCategory", "UpdateDescription");
 
@@ -228,6 +226,7 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
+
         // Then
         CategoryDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), CategoryDto.class);
@@ -240,7 +239,6 @@ public class CategoryControllerTest {
     void updateCategory_ByInvalidId_ShouldReturnException() throws Exception {
         // Given
         Long id = 300L;
-
         CategoryDto invalidUpdate = new CategoryDto(null, "Category3", null);
 
         String jsonRequest = objectMapper.writeValueAsString(invalidUpdate);
@@ -251,6 +249,7 @@ public class CategoryControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andReturn();
+
         // Then
         Assertions.assertTrue(result.getResponse().getContentAsString()
                 .contains("Category with id " + id + " was not found"));
@@ -329,7 +328,6 @@ public class CategoryControllerTest {
                 .andReturn();
 
         // Then
-
         Assertions.assertTrue(result.getResponse().getContentAsString()
                 .contains("Can`t find category by category id " + id));
     }

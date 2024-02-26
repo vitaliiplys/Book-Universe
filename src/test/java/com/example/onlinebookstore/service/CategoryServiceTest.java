@@ -60,7 +60,6 @@ public class CategoryServiceTest {
         CategoryDto result = categoryService.save(createCategoryDto);
 
         // Then
-
         Assertions.assertEquals(createCategoryDto, result);
         assertThat(result).isEqualTo(createCategoryDto);
         verify(categoryMapper, times(1)).toEntity(createCategoryDto);
@@ -91,7 +90,6 @@ public class CategoryServiceTest {
         // Then
         assertThat(categoryDtos).hasSize(1);
         assertThat(categoryDtos.get(0)).isEqualTo(categoryDto);
-
         verify(categoryRepository, times(1)).findAll(pageable);
         verify(categoryMapper, times(1)).toDto(category);
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
@@ -102,7 +100,6 @@ public class CategoryServiceTest {
     void getCategory_ByValidCategoryId_ShouldReturnCategory() {
         // Given
         Long categoryId = 1L;
-
         Category category = createCategory();
 
         CategoryDto expectedCategory = createCategoryDto();
@@ -115,7 +112,6 @@ public class CategoryServiceTest {
 
         // Then
         Assertions.assertEquals(expectedCategory, result);
-
         verify(categoryRepository, times(1)).findById(categoryId);
         verify(categoryMapper, times(1)).toDto(category);
 
@@ -138,7 +134,6 @@ public class CategoryServiceTest {
         String expected = "Can't find category with id " + categoryId;
         String actual = exception.getMessage();
         assertEquals(expected, actual);
-
         verify(categoryRepository, times(1)).findById(categoryId);
     }
 
@@ -178,6 +173,7 @@ public class CategoryServiceTest {
         CategoryDto categoryDto = new CategoryDto(id, "Update Category", "Update Description");
 
         when(categoryRepository.findById(id)).thenReturn(Optional.empty());
+
         // When
         Exception exception = assertThrows(
                 EntityNotFoundException.class,
@@ -188,7 +184,6 @@ public class CategoryServiceTest {
         String expected = "Category with id " + id + " was not found";
         String actual = exception.getMessage();
         assertEquals(expected, actual);
-
         verify(categoryRepository, times(1)).findById(id);
     }
 
@@ -214,6 +209,7 @@ public class CategoryServiceTest {
     void deleteCategory_ByInvalidId_ShouldReturnException() {
         // Given
         Long id = 1L;
+
         when(categoryRepository.findById(id)).thenReturn(Optional.empty());
 
         // When
@@ -221,12 +217,11 @@ public class CategoryServiceTest {
                 EntityNotFoundException.class,
                 () -> categoryService.deleteById(id)
         );
-        // Then
 
+        // Then
         String expected = "Can`t find category by id " + id;
         String actual = exception.getMessage();
         assertEquals(expected, actual);
-
         verify(categoryRepository, times(1)).findById(id);
     }
 

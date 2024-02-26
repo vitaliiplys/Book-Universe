@@ -131,7 +131,6 @@ class BookControllerTest {
                 .andReturn();
 
         // Then
-
         BookDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), BookDto.class);
         assertTrue(EqualsBuilder.reflectionEquals(expected, actual, "id"));
@@ -198,7 +197,6 @@ class BookControllerTest {
                 .andReturn();
 
         // Then
-
         BookDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), BookDto.class);
         assertTrue(EqualsBuilder.reflectionEquals(expectedBook, actual));
@@ -283,7 +281,6 @@ class BookControllerTest {
                 .andReturn();
 
         // Then
-
         BookDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), BookDto.class);
         assertTrue(EqualsBuilder.reflectionEquals(expectedBookDto, actual));
@@ -326,16 +323,16 @@ class BookControllerTest {
         expected.add(createBookDto(1L, "Book1", "Author1",
                 "1111111", BigDecimal.valueOf(10),
                 "Description1", "CoverImage1", List.of(1L)));
-        // When
 
+        // When
         MvcResult result = mockMvc.perform(get("/books/search")
                         .param("titles",bookSearchParameters.titles())
                         .param("authors", bookSearchParameters.authors())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        // Then
 
+        // Then
         List<BookDto> actual = objectMapper.readValue(result.getResponse().getContentAsByteArray(),
                 new TypeReference<List<BookDto>>() {
                 });
@@ -353,15 +350,14 @@ class BookControllerTest {
         );
 
         // When
-
         MvcResult result = mockMvc.perform(get("/books/search")
                         .param("titles",bookSearchParameters.titles())
                         .param("authors", bookSearchParameters.authors())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
-        // Then
 
+        // Then
         List<BookDto> actual = objectMapper.readValue(result.getResponse().getContentAsByteArray(),
                 new TypeReference<List<BookDto>>() {
                 });
