@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public BookDto findById(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find book by id " + id)
+                () -> new EntityNotFoundException("Can`t find book by id" + id)
         );
         return bookMapper.toDto(book);
     }
@@ -53,20 +53,18 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void deleteById(Long id) {
-        if (bookRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("Can`t find book by id " + id);
-        }
         bookRepository.deleteById(id);
     }
 
     @Override
     public BookDto updateById(Long id, CreateBookRequestDto updateDto) {
         if (bookRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("Can`t find book by id " + id);
+            throw new EntityNotFoundException("Can`t find book by id");
         }
         Set<Category> categoriesByIds = getCategoriesByIds(updateDto.getCategoriesIds());
         Book book = bookMapper.toModel(updateDto);
         book.setId(id);
+        bookRepository.save(book);
         book.setCategories(categoriesByIds);
         return bookMapper.toDto(bookRepository.save(book));
     }
@@ -82,9 +80,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<BookDtoWithoutCategoryIds> findAllByCategoryId(Long categoryId) {
-        if (!bookRepository.existsById(categoryId)) {
-            throw new EntityNotFoundException("Can`t find category by category id " + categoryId);
-        }
         return bookRepository.findAllByCategoriesId(categoryId).stream()
                 .map(bookMapper::toDtoWithoutCategories)
                 .toList();
@@ -92,7 +87,7 @@ public class BookServiceImpl implements BookService {
 
     private Set<Category> getCategoriesByIds(List<Long> ids) {
         if (ids.isEmpty()) {
-            throw new EntityNotFoundException("Cant find categories by Empty ids list");
+            throw new EntityNotFoundException("Can`t find categories");
         }
         return ids.stream()
                 .map(categoryRepository::findById)
