@@ -32,10 +32,10 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @Operation(summary = "Add book", description = "Add book to shopping cart")
-    public ShoppingCartDto addBookShopCart(@RequestBody CartItemDto cartItemDto,
+    public ShoppingCartDto addBookToShopCart(@RequestBody CartItemDto cartItemDto,
                                            Authentication authentication) {
         return shoppingCartService
-                .addBookShopCart((User) authentication.getPrincipal(), cartItemDto);
+                .addBookToShopCart((User) authentication.getPrincipal(), cartItemDto);
     }
 
     @GetMapping

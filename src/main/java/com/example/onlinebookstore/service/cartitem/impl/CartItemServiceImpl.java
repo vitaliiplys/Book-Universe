@@ -29,7 +29,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public void deleteItemById(User user, Long id) {
         CartItem cartItem = cartItemRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Can`t find item by id")
+                () -> new EntityNotFoundException("Can`t find item by id " + id)
         );
         if (cartItem.getShoppingCart().getUser().getId().equals(user.getId())) {
             cartItemRepository.delete(cartItem);
