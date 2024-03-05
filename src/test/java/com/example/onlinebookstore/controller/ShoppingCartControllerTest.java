@@ -12,9 +12,13 @@ import com.example.onlinebookstore.dto.cartitem.CartItemDto;
 import com.example.onlinebookstore.dto.cartitem.CartItemResponseDto;
 import com.example.onlinebookstore.dto.cartitem.CartItemUpdateRequestDto;
 import com.example.onlinebookstore.dto.shoppingcart.ShoppingCartDto;
+import com.example.onlinebookstore.model.CartItem;
+import com.example.onlinebookstore.repository.cartitem.CartItemRepository;
+import com.example.onlinebookstore.repository.shoppingcart.ShoppingCartRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Set;
 import javax.sql.DataSource;
 import lombok.SneakyThrows;
@@ -42,6 +46,12 @@ public class ShoppingCartControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
+    private ShoppingCartRepository shoppingCartRepository;
+
     @BeforeAll
     static void beforeAll(
             @Autowired DataSource dataSource,
@@ -68,7 +78,7 @@ public class ShoppingCartControllerTest {
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/insert-user.sql")
+                    new ClassPathResource("database/books/insert-users.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
@@ -114,7 +124,7 @@ public class ShoppingCartControllerTest {
             );
             ScriptUtils.executeSqlScript(
                     connection,
-                    new ClassPathResource("database/books/remove-user.sql")
+                    new ClassPathResource("database/books/remove-users.sql")
             );
         }
     }
@@ -129,7 +139,9 @@ public class ShoppingCartControllerTest {
         cartItemDto.setQuantity(1);
         ShoppingCartDto expected = new ShoppingCartDto(1L, 3L,
                 Set.of(new CartItemResponseDto(1L, 1L, "Book1", 1),
-                        new CartItemResponseDto(2L, 2L, "Book2", 1)));
+                        new CartItemResponseDto(3L, 2L, "Book2", 1)));
+
+        int cartItemAmount = shoppingCartRepository.findByUserId(3L).get().getCartItems().size();
 
         String jsonRequest = objectMapper.writeValueAsString(cartItemDto);
 
@@ -144,8 +156,9 @@ public class ShoppingCartControllerTest {
         // Then
         ShoppingCartDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsString(), ShoppingCartDto.class);
-
-        Assertions.assertEquals(expected, actual);
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+        int actualAmount = shoppingCartRepository.findByUserId(3L).get().getCartItems().size();
+        Assertions.assertEquals(actualAmount, cartItemAmount + 1);
     }
 
     @DisplayName("Get shopping cart user")
@@ -171,17 +184,18 @@ public class ShoppingCartControllerTest {
     }
 
     @DisplayName("update quantity by valid id from cart item")
-    @WithUserDetails("user1@example.com")
+    @WithUserDetails("update@example.com")
     @Test
     void updateQuantity_ByValidId_ShouldReturnSuccess() throws Exception {
         // Given
-        Long id = 1L;
-        ShoppingCartDto expected = new ShoppingCartDto(1L, 3L,
-                Set.of(new CartItemResponseDto(1L, 1L, "Book1", 1)));
+        Long id = 2L;
+        ShoppingCartDto expected = new ShoppingCartDto(2L, 4L,
+                Set.of(new CartItemResponseDto(2L, 1L, "Book1", 3)));
 
-        CartItemUpdateRequestDto updateRequestDto = new CartItemUpdateRequestDto(1);
+        CartItemUpdateRequestDto updateRequestDto = new CartItemUpdateRequestDto(3);
 
         String jsonRequest = objectMapper.writeValueAsString(updateRequestDto);
+
         // When
         MvcResult result = mockMvc.perform(put("/cart/cart-items/{id}", id)
                 .content(jsonRequest)
@@ -192,7 +206,9 @@ public class ShoppingCartControllerTest {
         // Then
         ShoppingCartDto actual = objectMapper.readValue(result.getResponse()
                 .getContentAsByteArray(), ShoppingCartDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertTrue(EqualsBuilder.reflectionEquals(expected, actual));
+        CartItem cartItem = cartItemRepository.findById(2L).orElseThrow();
+        Assertions.assertEquals(cartItem.getQuantity(), 3);
     }
 
     @DisplayName("Delete item from shopping cart")
@@ -210,6 +226,8 @@ public class ShoppingCartControllerTest {
 
         // Then
         Assertions.assertTrue(result.getResponse().getContentAsString().isEmpty());
+        Optional<CartItem> cartItem = cartItemRepository.findById(id);
+        Assertions.assertTrue(cartItem.isEmpty());
     }
 
     @DisplayName("Delete item from shopping cart by invalid id")

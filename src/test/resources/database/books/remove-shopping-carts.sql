@@ -1,1 +1,1 @@
-DELETE FROM shopping_carts WHERE id = 1;
+DELETE FROM shopping_carts WHERE id IN (1,2)
