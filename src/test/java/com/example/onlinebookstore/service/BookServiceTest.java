@@ -156,7 +156,7 @@ public class BookServiceTest {
         verify(bookRepository, times(1)).findById(id);
     }
 
-    @DisplayName("Create a new book ")
+    @DisplayName("Create a new book")
     @Test
     void saveBook_ValidBook_ReturnBookRequestDtoOk() {
         // Given
@@ -341,7 +341,6 @@ public class BookServiceTest {
         verify(bookSpecificationBuilder, times(2)).build(params);
         verify(bookRepository, times(1)).findAll(specification);
         verify(bookMapper, times(2)).toDto(any(Book.class));
-
     }
 
     private List<BookDtoWithoutCategoryIds> withoutCategoryIds() {

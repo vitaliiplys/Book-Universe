@@ -6,7 +6,7 @@ import com.example.onlinebookstore.model.ShoppingCart;
 import com.example.onlinebookstore.model.User;
 
 public interface ShoppingCartService {
-    ShoppingCartDto addBookShopCart(User user, CartItemDto cartItemDto);
+    ShoppingCartDto addBookToShopCart(User user, CartItemDto cartItemDto);
 
     ShoppingCartDto findByUser(User user);
 

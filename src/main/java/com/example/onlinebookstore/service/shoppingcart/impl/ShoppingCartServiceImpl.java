@@ -27,8 +27,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final CartItemRepository cartItemRepository;
     private final BookRepository bookRepository;
 
-    @Override
-    public ShoppingCartDto addBookShopCart(User user, CartItemDto cartItemDto) {
+    public ShoppingCartDto addBookToShopCart(User user, CartItemDto cartItemDto) {
         ShoppingCart shoppingCart = getShoppingCartByUser(user);
         Set<CartItem> cartItems = shoppingCart.getCartItems();
         if (cartItems == null) {
