@@ -53,6 +53,7 @@ public class OrderController {
         return orderItemService.findByIdAndUser(orderId, (User) authentication.getPrincipal());
     }
 
+    @Operation(summary = "Get item", description = "Get item from order by order id and item id")
     @GetMapping("/{orderId}/items/{itemId}")
     public OrderItemResponseDto getOrderIdAndItemId(Authentication authentication,
                                                     @PathVariable Long orderId,
