@@ -1,6 +1,6 @@
 ![BookStoreImage.jpg](Images/BookStoreImage.jpg)
 
-# **Online Book Store**
+# **Book Universe**
 
 This is an online store project in which you can select books by authors and book titles, 
 this helps you quickly find the book you need and place an order in the shortest possible time.
